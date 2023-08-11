@@ -65,7 +65,6 @@ router.get("/me", (req, res) => {
       if (!user) {
         return res.send({ error: "no user with that id" });
       }
-
       res.send({
         user: {
           name: user.name,

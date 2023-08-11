@@ -42,7 +42,7 @@ const getUserWithEmail = function (email) {
 const getUserWithId = function (id) {
   // return Promise.resolve(users[id]);
   return pool
-    .query(`SELECT users.id FROM users WHERE id = $1`, [id])
+    .query(`SELECT id, name, email FROM users WHERE id = $1`, [id])
     .then((result) => {
       console.log(result.rows[0]);
       return result.rows[0];
@@ -122,7 +122,7 @@ JOIN property_reviews ON properties.id = property_id
 
   // 3
   if (options.city) {
-    queryParams.push(`%${options.city}%`);
+    queryParams.push(`%${options.city.slice(1)}%`);
     queryString += `WHERE city LIKE $${queryParams.length} `;
   }
   if (options.owner_id) {
