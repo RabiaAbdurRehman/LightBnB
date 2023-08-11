@@ -127,6 +127,7 @@ JOIN property_reviews ON properties.id = property_id
   }
   if (options.owner_id) {
     queryParams.push(options.owner_id); // push the owner_id directly
+
     if (queryParams.length === 1) {
       // check if there is no WHERE clause yet
       queryString += `WHERE owner_id = $${queryParams.length} `; // use WHERE
@@ -143,7 +144,8 @@ JOIN property_reviews ON properties.id = property_id
       // check if there is no WHERE clause yet
       queryString += `WHERE
       $${queryParams.length - 1} <= cost_per_night AND cost_per_night <=  $${
-        queryParams.length} `; // use WHERE
+        queryParams.length
+      } `; // use WHERE
     } else {
       // otherwise
       queryString += `AND $${
@@ -151,7 +153,7 @@ JOIN property_reviews ON properties.id = property_id
       } <= cost_per_night AND cost_per_night <=  $${queryParams.length} `; // use AND
     }
   }
-  queryString +=`GROUP BY properties.id `;
+  queryString += `GROUP BY properties.id `;
   if (options.minimum_rating) {
     queryParams.push(options.minimum_rating);
     //The AND keyword is used to add multiple conditions to the SQL WHERE clause and not with the HAVING clause.
@@ -179,10 +181,6 @@ JOIN property_reviews ON properties.id = property_id
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function (property) {
-  // const propertyId = Object.keys(properties).length + 1;
-  // property.id = propertyId;
-  // properties[propertyId] = property;
-  // return Promise.resolve(property);
   let queryString = `INSERT INTO properties(owner_id, title, description, thumbnail_photo_url, cover_photo_url,
     cost_per_night, street, city, province, post_code, country, parking_spaces, number_of_bathrooms, number_of_bedrooms)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING * `;
